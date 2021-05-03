@@ -8,8 +8,12 @@ Configuration Reference - https://airflow.apache.org/docs/apache-airflow/stable/
 ### How to use ?
 Airflow needs to run initial migrations in order to setup Database for operations.
 
-For Testing: <br/>
-Docker-compose at root path can be used for dev testing. It uses local database(postgres). <br/>
+### Testing: <br/>
+1) git clone https://github.com/OpsComb/Airflow-Compose.git
+2) Run ```docker-compose up```
+3) Open this url on your browser -> 127.0.0.1:8080
+4) Login using -> username - airflow-user , password - airflow-user
+<br/>
 > Note: docker-compose file at root is not recommended for production use cases
 
 For Production:
