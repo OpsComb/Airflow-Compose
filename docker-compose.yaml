@@ -13,17 +13,17 @@
       AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
       AIRFLOW__CORE__FERNET_KEY: ''
       AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+      AIRFLOW__WEBSERVER__WORKERS: 1
       AIRFLOW__CORE__LOAD_EXAMPLES: 'true'
+      AIRFLOW__CORE__DEFAULT_TIMEZONE: 'Asia/Kolkata'
+      AIRFLOW__WEBSERVER__DEFAULT_UI_TIMEZONE: 'Asia/Kolkata'
       AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
+      AIRFLOW__WEBSERVER__EXPOSE_CONFIG: 'true'
+      AIRFLOW__WEBSERVER__EXPOSE_HOSTNAME: 'true'
     volumes:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
-    depends_on:
-      redis:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
   
   services:
     postgres:
@@ -33,7 +33,7 @@
         POSTGRES_PASSWORD: airflow
         POSTGRES_DB: airflow
       volumes:
-        - postgres-db-volume:/var/lib/postgresql/data
+        - ./db:/var/lib/postgresql/data
       restart: always
   
     redis:
@@ -48,16 +48,25 @@
       ports:
         - 8080:8080
       restart: always
+      depends_on:
+        airflow-init:
+            condition: service_completed_successfully
   
     airflow-scheduler:
       <<: *airflow-common
       command: scheduler
       restart: always
+      depends_on:
+        airflow-init:
+            condition: service_completed_successfully
   
     airflow-worker:
       <<: *airflow-common
       command: celery worker
       restart: always
+      depends_on:
+        airflow-init:
+            condition: service_completed_successfully
   
     airflow-init:
       <<: *airflow-common
