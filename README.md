@@ -12,7 +12,7 @@ Airflow needs to run initial migrations in order to setup Database for operation
 1) git clone https://github.com/OpsComb/Airflow-Compose.git
 2) Run ```docker-compose up```
 3) Open this url on your browser -> 127.0.0.1:8080
-4) Login using -> username - airflow-user , password - airflow-user
+4) Login using -> username - airflow-user , password - airflow-pass
 > Note: docker-compose file at root is not recommended for production use cases
 
 ### Production: <br />
